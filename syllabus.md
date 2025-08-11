@@ -9,4 +9,4 @@
     - IP addressing & subnetting
     - VLANs and trunking
     - Packet sniffing basics
-    - [Lab 01](goal-1/week-01-networking-fundamentals/lab-01.md) | [Assignment 01](semester-1/week-01-networking-fundamentals/assignment-01.md)
+    - [Lab 01](goal-1/week-01-networking-fundamentals/lab-01.md) | [Assignment 01](goal-1/week-01-networking-fundamentals/assignment-01.md)
