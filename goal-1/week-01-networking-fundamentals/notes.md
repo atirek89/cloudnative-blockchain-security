@@ -139,16 +139,16 @@ By the end of this week, we will be able to:
 
 ## 2. IP Addressing & Subnetting
 
-- **IP Addressing**
+- ### IP Addressing
 
   - **What is an IP Address?**
     Think of an **IP address** like a **house address in a digital city**.
     - The **street** = Network part (tells which neighborhood the house is in)
     - The**house number** = Host part (which exact building in that neighborhood)
 
-    Example: ```192.168.1.10```
-    - ```192.168.1``` -> Network
-    - ```10``` -> Host
+    Example: `192.168.1.10`
+    - `192.168.1` -> Network
+    - `10` -> Host
 
     All devices in the same network share same **network part** but have **different host parts**.
 
@@ -157,8 +157,8 @@ By the end of this week, we will be able to:
 
     **IPv4 (32 bits = 4 octets)**
 
-    Example: ```192.168.1.10``
-    - Stored in binary: ```11000000.10101000.00000001.00001010```
+    Example: `192.168.1.10`
+    - Stored in binary: `11000000.10101000.00000001.00001010`
     - Each octet (0-255) is separated by dots.
 
   - **Public vs Private IP**
@@ -190,3 +190,60 @@ By the end of this week, we will be able to:
     - Home router probably gives 192.168.x.x -> because it's small & easy to manage.
     - Corporate networks often use 10.x.x.x for flexibility.
     - You'll rarely see 172.16-172.31 unless you work with certain enterprise networks or cloud setups (AWS VPC often uses 172 ranges).
+
+  - **NAT (Network Address Translation)**
+    Imagine home Wi-Fi:
+    - All devices (phone, laptop, TV) have a private IPs like `192.168.1.10`, `192.168.1.10`, etc.
+    - The internet has no idea about these IPs - it only sees home **router's public IP**.
+
+    **How NAT Works**
+    - NAT sits on our router or firewall.
+    - When our devices sends a packet to the internet:
+      1. NAT **replaces our private IP** with our router's **public IP**.
+      2. It **remembers the mapping** (e.g., Laptop ->  Port 40001, Phone -> Port 40002).
+      3. When the reply comes back, NAT **swaps it back** to the right device.
+
+    **Types of NAT**
+    1. **Static NAT** - One private IP maps to one public IP (like a personal translator)
+    2. **Dynamic NAT** - A pool of public IPs shared among private IPs
+    3. **PAT (Port Address Translation)** - Many private IPs share a **single public IP** using different port numbers (**this is what our home Wi-Fi does**).
+
+    **NAT Gateway in the Cloud**
+
+    In AWS, GCP, Azure, etc., a **NAT Gateway**:
+    - Lets **private subnet resources** (like EC2 instances without public IPs) access the internet **outbound only**.
+    - No inbound internet traffic can reach them unless explicitly configured.
+    - Acts like our **router's NAT**, but managed by the cloud provider.
+
+    **Example:**
+    - Private EC2 (`10.0.2.14`) needs to download security patches.
+    - It sends request - NET Gateway replaces `10.0.2.14` with public IP `3.15.23.88` -> Internet replies -> NAT Gateway sends back to `10.0.2.14`.
+
+      ```css
+      [Private IP device] → (Private IP)
+            |
+            v
+      [Router/NAT Gateway] → (Public IP)
+            |
+            v
+      [Internet]
+      ```
+
+  - **Subnet Mask - The Divider**
+    A Subnet Mask tells us where the network ends and hosts begin.
+
+    Example:
+
+    ```nginx
+      IP Address: 192.168.1.10
+      Subnet Mask: 255.255.255.0
+    ```
+
+    - `255` -> network portion (fixed, can't change)
+    - `0` -> host portion (can vary)
+
+    So here:
+    - Network = `192.168.1`
+    - Hosts = `.1` to `.254` (`.0` = network ID, `.255` = broadcast)
+
+    
